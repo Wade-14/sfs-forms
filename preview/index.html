@@ -1,0 +1,659 @@
+<!doctype html>
+<html lang="en-NZ">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>SFS Forms</title>
+<meta name="theme-color" content="#1d5a40">
+<meta name="robots" content="noindex,nofollow">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Public+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: phone-first single column. Home screen of folders, then one form at a time. */
+:root{
+  --bg:#eef2ee; --surface:#ffffff; --sunken:#f5f7f4; --line:#d3dbd3; --ink:#15211a; --muted:#56655b;
+  --forest:#1d5a40; --forest-ink:#ffffff; --forest-soft:#dcebe2; --hivis:#e0692a;
+  --amber:#8a5200; --amber-soft:#fbecd3; --danger:#b3261e; --danger-soft:#fbe4e2; --pad:#ffffff;
+  --f-display:"Barlow Condensed","Arial Narrow",system-ui,sans-serif;
+  --f-body:"Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --r:10px;
+}
+@media (prefers-color-scheme: dark){:root{
+  --bg:#101713; --surface:#18221c; --sunken:#131c17; --line:#2c3a31; --ink:#e6eee8; --muted:#9aaba0;
+  --forest:#5fb88c; --forest-ink:#0c1a12; --forest-soft:#1f3a2c; --hivis:#f08a4f;
+  --amber:#f2b45a; --amber-soft:#3a2c14; --danger:#ff8a80; --danger-soft:#3a1a18; --pad:#f4f6f2; color-scheme:dark}}
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{color-scheme:light}
+:root{padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;-webkit-text-size-adjust:100%;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.45}
+.layout{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 120px;display:grid;gap:20px;grid-template-columns:minmax(0,1fr)}
+.main{min-width:0;max-width:720px;width:100%;justify-self:center}
+@media (min-width:1040px){
+  .layout{grid-template-columns:360px minmax(0,1fr)}
+  .main{justify-self:start}
+  aside.jobs{display:block!important;position:sticky;top:20px;align-self:start;max-height:calc(100vh - 40px);overflow:auto}
+  #btn-jobs{display:none}
+  .jobs-close{display:none}
+}
+header.top{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-bottom:14px;border-bottom:3px solid var(--forest);margin-bottom:18px}
+.brand small{display:block;font-family:var(--f-display);text-transform:uppercase;letter-spacing:.12em;font-size:13px;color:var(--muted);font-weight:600}
+.brand h1{margin:0;font-family:var(--f-display);font-weight:700;font-size:34px;line-height:1;letter-spacing:.01em}
+.top-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.role{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--forest);background:var(--forest-soft);border-radius:999px;padding:4px 10px}
+
+section.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px;margin-bottom:14px;display:grid;gap:14px}
+section.card>h2{margin:0;font-family:var(--f-display);font-weight:600;font-size:15px;letter-spacing:.14em;text-transform:uppercase;color:var(--forest);display:flex;justify-content:space-between;align-items:center;gap:8px}
+.row{display:grid;gap:12px;grid-template-columns:1fr 1fr}
+.row>*{min-width:0}
+@media (max-width:540px){.row{grid-template-columns:1fr}}
+.field{display:grid;gap:6px;min-width:0}
+label,.label{font-weight:600;font-size:14px}
+.hint{font-size:13px;color:var(--muted);font-weight:400}
+input[type=password],input[type=text],input[type=date],input[type=month],input[type=datetime-local],input[type=time],input[type=number],textarea,select{
+  width:100%;font:inherit;color:var(--ink);background:var(--sunken);border:1px solid var(--line);border-radius:8px;padding:11px 12px;min-height:46px}
+textarea{min-height:84px;resize:vertical}
+input[readonly]{background:var(--forest-soft);border-color:transparent;font-weight:600}
+input:focus-visible,textarea:focus-visible,select:focus-visible,button:focus-visible,a:focus-visible,summary:focus-visible{outline:3px solid var(--hivis);outline-offset:1px}
+.invalid{border-color:var(--danger)!important}
+.err{color:var(--danger);font-size:13px;font-weight:600}
+
+button,.btn{font:inherit;font-weight:600;font-size:15px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:10px 14px;min-height:44px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:6px;text-decoration:none}
+button:hover,.btn:hover{border-color:var(--forest)}
+button:disabled{opacity:.55;cursor:default}
+.btn-primary{background:var(--forest);border-color:var(--forest);color:var(--forest-ink)}
+.btn-hivis{background:var(--hivis);border-color:var(--hivis);color:#1a0d05}
+.btn-danger{background:transparent;border-color:var(--danger);color:var(--danger)}
+.btn-ghost{background:transparent;border-color:transparent;color:var(--forest);padding-inline:8px}
+.btn-small{min-height:36px;padding:6px 10px;font-size:14px}
+.icon-btn{min-height:44px;width:44px;padding:0;font-size:22px;line-height:1;color:var(--muted)}
+.count{background:var(--hivis);color:#1a0d05;border-radius:999px;font-size:12px;font-weight:700;padding:1px 7px;min-width:22px;text-align:center}
+
+.mode-banner{background:var(--amber-soft);color:var(--amber);border-radius:var(--r);padding:10px 14px;display:flex;gap:10px;justify-content:space-between;align-items:center;flex-wrap:wrap;margin-bottom:14px;font-weight:600;font-size:15px}
+.mode-banner span{min-width:0}
+
+details.dd{position:relative}
+details.dd summary{list-style:none;cursor:pointer;background:var(--sunken);border:1px solid var(--line);border-radius:8px;padding:11px 40px 11px 12px;min-height:46px;position:relative}
+details.dd summary::-webkit-details-marker{display:none}
+details.dd summary::after{content:"";position:absolute;right:16px;top:50%;width:8px;height:8px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:translateY(-70%) rotate(45deg)}
+details.dd[open] summary::after{transform:translateY(-30%) rotate(-135deg)}
+details.dd summary .ph{color:var(--muted)}
+.dd-list{margin-top:6px;background:var(--surface);border:1px solid var(--line);border-radius:8px;max-height:340px;overflow:auto;box-shadow:0 8px 24px rgba(0,0,0,.12)}
+.dd-list label{display:flex;align-items:center;gap:12px;padding:12px 14px;font-weight:500;font-size:16px;cursor:pointer;border-bottom:1px solid var(--line)}
+.dd-list input{width:22px;height:22px;accent-color:var(--forest);flex:none}
+.dd-done{display:flex;justify-content:flex-end;padding:8px;position:sticky;bottom:0;background:var(--surface)}
+
+table.hrs{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+table.hrs th{font-family:var(--f-display);text-transform:uppercase;letter-spacing:.08em;font-size:13px;color:var(--muted);text-align:left;font-weight:600;padding:4px 6px}
+table.hrs td{padding:5px 6px;vertical-align:middle}
+table.hrs td.name{font-weight:600;overflow-wrap:anywhere}
+table.hrs input{max-width:110px;min-height:44px}
+table.hrs tfoot td{font-weight:700;padding-top:10px;border-top:1px solid var(--line)}
+
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;justify-self:start}
+.seg button{border:0;border-radius:0;min-width:96px;background:var(--sunken)}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--forest);color:var(--forest-ink)}
+
+.mats{display:grid;gap:10px}
+.mat-row{display:grid;grid-template-columns:minmax(0,1fr) 140px 44px;gap:8px;align-items:end}
+@media (max-width:540px){.mat-row{grid-template-columns:minmax(0,1fr) 110px 44px}}
+.mat-row .field label{font-size:12px;color:var(--muted);font-weight:500}
+
+.sig-wrap{position:relative;background:var(--pad);border:1px dashed var(--muted);border-radius:8px;height:170px;touch-action:none}
+.sig-wrap canvas{width:100%;height:100%;display:block;cursor:crosshair}
+.sig-wrap .sig-hint{position:absolute;inset:auto 0 12px;text-align:center;color:#8a958e;font-size:14px;pointer-events:none}
+.sig-line{position:absolute;left:24px;right:24px;bottom:40px;border-bottom:1px solid #c5ccc6;pointer-events:none}
+
+.send{display:grid;gap:12px}
+.send .btns{display:flex;flex-wrap:wrap;gap:8px}
+.addr{font-family:ui-monospace,Menlo,monospace;font-size:14px;background:var(--sunken);border:1px solid var(--line);border-radius:6px;padding:4px 8px;user-select:all;word-break:break-all}
+.status{font-size:14px;color:var(--forest);font-weight:600;min-height:1.2em}
+.status.bad{color:var(--danger)}
+.done-box{background:var(--forest-soft);border-radius:var(--r);padding:14px;display:grid;gap:10px}
+.track-box{background:var(--forest-soft);border-radius:var(--r);padding:12px 14px;display:grid;gap:8px;margin-bottom:14px}
+.track-box b.big{font-size:18px}
+.track-box .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.track-box input{max-width:110px;min-height:44px}
+.job-card.tracking .tag{background:var(--amber-soft);color:var(--amber)}
+.done-box b{font-size:16px}
+.done-box .btns{display:flex;flex-wrap:wrap;gap:8px}
+.confirm{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:14px}
+.install{background:var(--surface);border:1px solid var(--forest);border-radius:var(--r);padding:12px 14px;margin-bottom:14px;display:grid;gap:10px}
+.install-top{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.install-top img{width:40px;height:40px;border-radius:9px;flex:none}
+.install-top .txt{display:grid;min-width:0;flex:1 1 200px}
+.install-top .btns{display:flex;gap:6px}
+@media (max-width:600px){.install-top .btns{flex:1 1 100%}.install-top .btns .btn-primary{flex:1}}
+.install ol{margin:0;padding-left:22px;display:grid;gap:6px;font-size:15px}
+.install .ico{display:inline-block;vertical-align:-3px;width:18px;height:18px}
+
+/* Jobs panel */
+aside.jobs{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;display:none}
+@media (max-width:1039px){
+  aside.jobs.open{display:block;position:fixed;inset:0;z-index:40;border-radius:0;border:0;overflow:auto;
+    padding-top:calc(16px + env(safe-area-inset-top,0px));padding-bottom:calc(24px + env(safe-area-inset-bottom,0px));
+    padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+}
+.jobs-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:12px}
+.jobs-head h2{margin:0;font-family:var(--f-display);font-size:24px;font-weight:700}
+.jobs-list{display:grid;gap:10px}
+.job-card{width:100%;text-align:left;display:grid;gap:4px;justify-content:stretch;align-items:start;background:var(--sunken);border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-weight:400}
+.job-card .jn{font-weight:600;font-size:16px}
+.tag{justify-self:start;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;border-radius:4px;padding:2px 6px;background:var(--amber-soft);color:var(--amber)}
+.meta{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.day-card{background:var(--sunken);border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:grid;gap:8px}
+.day-head{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.day-head b{font-size:15px}
+.day-card table{width:100%;border-collapse:collapse;font-size:13.5px;font-variant-numeric:tabular-nums}
+.day-card th{color:var(--muted);font-weight:500;font-size:12px;text-align:left;padding:2px 0}
+.day-card td{padding:2px 0}
+.day-card td+td,.day-card th+th{text-align:right}
+.day-card img{max-width:180px;height:auto;background:#fff;border-radius:4px}
+.job-actions{display:grid;gap:8px;margin-top:12px}
+.empty{color:var(--muted);font-size:15px;padding:8px 0}
+
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--surface);border-top:1px solid var(--line);box-shadow:0 -6px 20px rgba(0,0,0,.08);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-top:10px;padding-bottom:calc(10px + env(safe-area-inset-bottom,0px))}
+.bar-in{max-width:720px;margin:0 auto;display:flex;gap:12px;align-items:center;justify-content:space-between}
+.bar-sum{font-size:14px;color:var(--muted);min-width:0;font-variant-numeric:tabular-nums}
+.bar-sum b{color:var(--ink)}
+
+.gate{min-height:100vh;display:grid;place-items:center;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:24px}
+.gate-card{width:100%;max-width:380px;background:var(--surface);border:1px solid var(--line);border-top:4px solid var(--forest);border-radius:var(--r);padding:24px;display:grid;gap:14px}
+.gate-card h1{margin:0;font-family:var(--f-display);font-weight:700;font-size:30px;line-height:1}
+.gate-card small{font-family:var(--f-display);text-transform:uppercase;letter-spacing:.12em;font-size:13px;color:var(--muted);font-weight:600}
+.gate-card input{font-size:18px;letter-spacing:.06em}
+body.locked .layout,body.locked .bar{display:none}
+body:not(.locked) .gate{display:none}
+.home{max-width:720px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 40px}
+.folder-head{display:flex;margin-bottom:10px}
+.folder-title{margin:0 0 12px;font-family:var(--f-display);font-size:26px;font-weight:700}
+.tile.folder .ic{background:var(--forest-soft);color:var(--forest)}
+.tile .count-line{font-size:13px;color:var(--muted);font-weight:600}
+.fixed-val{background:var(--sunken);border:1px dashed var(--line);border-radius:8px;padding:11px 12px;color:var(--muted)}
+.ro-row{display:grid;grid-template-columns:minmax(0,40%) minmax(0,1fr);gap:10px;padding:8px 0;border-bottom:1px solid var(--line);font-size:15px}
+.ro-row:last-child{border-bottom:0}
+.ro-row>span:last-child{overflow-wrap:anywhere}
+.ro-sig{max-width:180px;background:#fff;border-radius:4px;margin-top:4px}
+section.card.locked{background:var(--sunken)}
+.inbox{background:var(--surface);border:2px solid var(--danger);border-radius:var(--r);padding:14px;margin-bottom:14px;display:grid;gap:10px}
+.inbox h2{margin:0;font-family:var(--f-display);font-size:20px;color:var(--danger)}
+.inbox a.inc{display:grid;gap:2px;text-decoration:none;color:var(--ink);background:var(--sunken);border:1px solid var(--line);border-radius:8px;padding:10px 12px}
+.inbox a.inc b{font-size:15px}
+.badge.urgent{background:var(--danger-soft);color:var(--danger)}
+.alert-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.home-sub{margin:0 0 6px;font-family:var(--f-display);font-size:15px;letter-spacing:.14em;text-transform:uppercase;color:var(--forest);font-weight:600}
+.tiles{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(200px,1fr))}
+.tile{display:grid;grid-template-columns:48px 1fr;gap:12px;align-items:start;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;text-decoration:none;color:var(--ink);min-height:110px}
+.tile:hover{border-color:var(--forest)}
+.tile .ic{width:48px;height:48px;border-radius:12px;background:var(--forest);color:var(--forest-ink);display:grid;place-items:center}
+.tile .ic svg{width:26px;height:26px}
+.tile .tt{display:grid;gap:4px;min-width:0}
+.tile b{font-family:var(--f-display);font-size:22px;line-height:1.05;font-weight:700}
+.tile .hint{font-size:13.5px}
+.tile .badges{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
+.badge{font-size:11.5px;font-weight:700;letter-spacing:.03em;border-radius:999px;padding:2px 8px;background:var(--amber-soft);color:var(--amber)}
+.badge.draft{background:var(--forest-soft);color:var(--forest)}
+.back{font-weight:600}
+body.view-home .layout,body.view-home .bar{display:none}
+body.view-form .home{display:none}
+body.locked .home{display:none}
+.generic{display:none;max-width:720px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 60px}
+body.view-generic .generic{display:block}
+body.view-generic .home,body.view-generic .layout,body.view-generic .bar,body.locked .generic{display:none!important}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--line);background:var(--sunken);color:var(--ink);border-radius:999px;padding:8px 14px;min-height:42px;font-weight:500;font-size:15px}
+.chip[aria-pressed="true"]{background:var(--forest);border-color:var(--forest);color:var(--forest-ink)}
+.chip.multi[aria-pressed="true"]::before{content:"✓ "}
+.chip.alert[aria-pressed="true"]{background:var(--danger);border-color:var(--danger);color:#fff}
+.notice{background:var(--amber-soft);color:var(--ink);border-left:4px solid var(--hivis);border-radius:8px;padding:12px 14px;display:grid;gap:4px}
+.notice p{margin:0;font-size:15px}
+.notice b{color:var(--amber)}
+.loc-row{display:flex;gap:8px}
+.loc-row input{flex:1;min-width:0}
+.loc-row button{flex:none}
+.sigs{display:grid;gap:12px}
+.sig-item{display:grid;gap:8px;background:var(--sunken);border:1px solid var(--line);border-radius:10px;padding:10px}
+.sig-item-head{display:flex;gap:8px;align-items:center}
+.sig-item-head select{flex:1;min-width:0}
+.sig-wrap.small{height:130px}
+.photos{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px}
+.photo{position:relative}
+.photo img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;display:block;max-width:100%}
+.photo .icon-btn{position:absolute;top:4px;right:4px;background:var(--surface);border-radius:50%;width:34px;min-height:34px}
+.photo-btns{display:flex;flex-wrap:wrap;gap:8px}
+.photo-add{justify-self:start;cursor:pointer}
+.mixes{display:grid;gap:10px}
+.prow{display:grid;gap:8px;background:var(--sunken);border:1px solid var(--line);border-radius:10px;padding:10px}
+.prow .field label{font-size:12px;color:var(--muted);font-weight:500}
+.prow-del{justify-self:start}
+.amt{display:flex;gap:6px;align-items:stretch}
+.amt input{flex:1;min-width:0}
+.unit-seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;flex:none}
+.unit-seg button{border:0;border-radius:0;min-width:40px;padding:0 8px;min-height:42px;background:var(--surface);font-size:14px}
+.unit-seg button+button{border-left:1px solid var(--line)}
+.unit-seg button[aria-pressed="true"]{background:var(--forest);color:var(--forest-ink)}
+.mix{display:grid;grid-template-columns:minmax(0,1fr) 170px 92px 84px 44px;gap:8px;align-items:end;background:var(--sunken);border:1px solid var(--line);border-radius:10px;padding:10px}
+.mix .field label{font-size:12px;color:var(--muted);font-weight:500}
+.mix-rate{display:grid;gap:2px;padding-bottom:10px;font-variant-numeric:tabular-nums}
+.mix-rate b{font-size:16px;color:var(--forest);white-space:nowrap}
+@media (max-width:600px){.mix{grid-template-columns:1fr 1fr 44px}.mix>.mix-prod{grid-column:1/3;grid-row:1}.mix>.field:nth-child(2){grid-column:1/3;grid-row:2}.mix>.field:nth-child(3){grid-column:1;grid-row:3}.mix>.mix-rate{grid-column:2/4;grid-row:3}.mix>.mix-del{grid-column:3;grid-row:1}}
+.tally-scroll{overflow-x:auto}
+.tally{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+.tally th{font-size:13px;font-weight:600;color:var(--muted);padding:4px;text-align:center}
+.tally tbody th{text-align:left;color:var(--ink);font-size:15px;padding-right:8px}
+.tally td{padding:4px}
+.tally td input{text-align:center;min-height:44px;padding:8px 4px;min-width:64px}
+.tally td.na{text-align:center;color:var(--muted)}
+.checklist{display:grid;gap:8px}
+.check-item{justify-content:flex-start;text-align:left;gap:12px;background:var(--sunken);font-weight:500;min-height:50px}
+.check-item .box{pointer-events:none;width:24px;height:24px;border:2px solid var(--muted);border-radius:6px;flex:none;display:grid;place-items:center;background:var(--surface)}
+.check-item[aria-pressed="true"]{border-color:var(--forest);background:var(--forest-soft)}
+.check-item[aria-pressed="true"] .box{background:var(--forest);border-color:var(--forest)}
+.check-item[aria-pressed="true"] .box::after{content:"";width:6px;height:12px;border:solid var(--forest-ink);border-width:0 3px 3px 0;transform:translateY(-2px) rotate(45deg)}
+.derived-val{font-size:17px;color:var(--forest)}
+.derived-val.warn{color:var(--danger)}
+.loc-map{width:100%;max-width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:8px;border:1px solid var(--line)}
+.menu-btn{width:44px;padding:0}
+.menu-btn svg{width:22px;height:22px}
+.drawer-shade{position:fixed;inset:0;background:rgba(10,18,13,.45);z-index:60;opacity:0;pointer-events:none;transition:opacity .2s}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(360px,88vw);z-index:61;background:var(--surface);border-left:1px solid var(--line);box-shadow:-10px 0 30px rgba(0,0,0,.18);
+  transform:translateX(105%);transition:transform .22s ease;overflow-y:auto;display:grid;align-content:start;gap:18px;
+  padding-top:calc(18px + env(safe-area-inset-top,0px));padding-bottom:calc(24px + env(safe-area-inset-bottom,0px));padding-left:18px;padding-right:max(18px,env(safe-area-inset-right,0px))}
+body.drawer-open .drawer{transform:none}
+body.drawer-open .drawer-shade{opacity:1;pointer-events:auto}
+.drawer-head{display:flex;justify-content:space-between;align-items:center}
+.drawer-head h2{margin:0;font-family:var(--f-display);font-size:26px;font-weight:700}
+.drawer section{display:grid;gap:10px;border-top:1px solid var(--line);padding-top:16px}
+.drawer h3{margin:0;font-family:var(--f-display);font-size:15px;letter-spacing:.12em;text-transform:uppercase;color:var(--forest)}
+.share-box{background:var(--sunken);border:1px solid var(--line);border-radius:8px;padding:10px 12px;display:grid;gap:4px;font-size:14px;word-break:break-all}
+.share-box b{font-size:16px;letter-spacing:.04em}
+.drawer .btns{display:flex;flex-wrap:wrap;gap:8px}
+@media (prefers-reduced-motion:reduce){.drawer,.drawer-shade{transition:none}}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+</style>
+</head>
+<body class="locked view-home">
+
+<div class="gate" id="gate">
+  <form class="gate-card" id="gate-form" autocomplete="off">
+    <div><small>Southland Forest Services</small><h1>SFS Forms</h1></div>
+    <div class="field">
+      <label for="gate-code">Enter the share code</label>
+      <input type="password" id="gate-code" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="Share code">
+      <span class="hint">Ask the office if you don't have it. You only need to enter it once on this phone.</span>
+    </div>
+    <button type="submit" class="btn-primary" id="gate-go">Open forms</button>
+    <span class="err" id="gate-err" role="alert" hidden></span>
+  </form>
+</div>
+
+<div class="home" id="home">
+  <header class="top">
+    <div class="brand">
+      <small>Southland Forest Services</small>
+      <h1>SFS Forms</h1>
+    </div>
+    <div class="top-actions">
+      <span class="role" id="role-pill-home" hidden>Manager</span>
+      <button type="button" class="btn-small menu-btn" id="btn-menu" aria-label="Open settings" aria-expanded="false" aria-controls="drawer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    </div>
+  </header>
+    <div class="install" id="install-banner" hidden>
+    <div class="install-top">
+      <img src="icon-192.png" alt="">
+      <div class="txt"><b>Put the app on your home screen</b><span class="hint">Opens full screen like any app, and works with no signal.</span></div>
+      <div class="btns"><button type="button" class="btn-primary btn-small" id="btn-install">Install app</button><button type="button" class="btn-ghost btn-small" id="btn-install-x">Not now</button></div>
+    </div>
+    <div id="install-help" hidden></div>
+  </div>
+
+  <div id="folder-root">
+    <p class="home-sub">Choose a folder</p>
+    <div class="tiles" id="folder-tiles"></div>
+  </div>
+  <div id="folder-view" hidden>
+    <div class="folder-head"><a class="btn btn-small back" href="#" id="folder-back">← All folders</a></div>
+    <h2 class="folder-title" id="folder-title"></h2>
+  <div class="tiles" id="form-tiles"></div>
+  </div>
+</div>
+
+<div class="generic" id="generic">
+  <header class="top">
+    <div class="brand">
+      <small>Southland Forest Services</small>
+      <h1 id="generic-title">Form</h1>
+    </div>
+    <div class="top-actions"><a class="btn btn-small back" href="#" id="generic-home">← Back</a></div>
+  </header>
+  <div id="generic-extra"></div>
+  <form id="generic-body" autocomplete="off" novalidate onsubmit="return false"></form>
+</div>
+
+<div class="drawer-shade" id="drawer-shade"></div>
+<aside class="drawer" id="drawer" aria-label="Settings" aria-hidden="true">
+  <div class="drawer-head"><h2>Settings</h2><button type="button" class="btn-small" id="drawer-close">Close</button></div>
+  <section>
+    <h3>Share the app</h3>
+    <p class="hint" style="margin:0">Send staff the link and share code. They open the link, enter the code, then tap Install app.</p>
+    <div class="share-box"><span class="hint">Link</span><span id="share-url"></span><span class="hint" style="margin-top:6px">Share code</span><b id="share-code">…</b></div>
+    <div class="btns"><button type="button" class="btn-primary" id="btn-share-app">Share link and code</button><button type="button" id="btn-copy-app">Copy message</button></div>
+    <div class="status" id="share-app-status" role="status"></div>
+  </section>
+  <section id="alerts-section" hidden>
+    <h3>Incident alerts</h3>
+    <p class="hint" style="margin:0">Get a notification on this phone when someone submits an incident / accident report. Managers only.</p>
+    <span id="alerts-state" class="hint"></span>
+    <div class="alert-row"><button type="button" class="btn-primary" id="btn-alerts" hidden>Turn on incident alerts</button></div>
+    <div class="status" id="alerts-msg" role="status"></div>
+  </section>
+</aside>
+
+<script src="vendor/jspdf.umd.min.js"></script>
+<script src="vendor/jspdf.plugin.autotable.min.js"></script>
+<script src="vendor/logo.js"></script>
+<script src="forms.js"></script>
+<script>
+(function(){
+"use strict";
+/* ---- Who appears in the staff lists, and the storage service ---- */
+// SFS staff: fill in when the names come through. Until then people type names under "Other".
+const STAFF = [];
+window.NZCS_STAFF = STAFF;
+const API = /^(localhost|127\.0\.0\.1)$/.test(location.hostname) ? "http://localhost:8787" : "https://sfs-forms-api.royal-dawn-9e17.workers.dev";
+
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const store = {
+  get(k, d){ try{ const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; }catch(e){ return d; } },
+  set(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} },
+  del(k){ try{ localStorage.removeItem(k); }catch(e){} }
+};
+const todayISO = () => { const d = new Date(); return new Date(d.getTime() - d.getTimezoneOffset()*60000).toISOString().slice(0,10); };
+const dmy = iso => iso ? iso.split("-").reverse().join("-") : "";
+const n = v => { const x = parseFloat(v); return isFinite(x) ? x : 0; };
+const fmt = v => String(Math.round(n(v)*100)/100);
+const hrsTxt = v => v === "" || v == null ? "" : fmt(v) + (n(v) === 1 ? " hour" : " hours");
+const plural = (k, w) => k + " " + w + (k === 1 ? "" : "s");
+
+/* ---------- access (share code checked by the storage service) ---------- */
+// Keys start "sfs." so they never mix with the NZCS app (both apps live on wade-14.github.io).
+const AUTH_KEY = "sfs.forms.auth";
+let auth = store.get(AUTH_KEY, null);   // {code, role}
+async function api(method, path, body){
+  let res;
+  try{
+    res = await fetch(API + path, {method, headers:{"Content-Type":"application/json","X-Access-Code":auth ? auth.code : ""}, body: body ? JSON.stringify(body) : undefined});
+  }catch(e){ const err = new Error("No connection. Check your signal and try again."); err.offline = true; throw err; }
+  let data = {}; try{ data = await res.json(); }catch(e){}
+  if (res.status === 401){ lock("Your share code has changed. Enter the current code."); }
+  if (!res.ok) throw new Error(data.error || "Something went wrong (" + res.status + ").");
+  return data;
+}
+function lock(msg){ store.del(AUTH_KEY); auth = null; document.body.classList.add("locked"); const e = $("#gate-err"); if (msg){ e.textContent = msg; e.hidden = false; } }
+/* ---------- automatic email (server sends the PDF from the forms Gmail account) ---------- */
+let mailOn = false, mailFailed = false;
+async function checkMail(){ try{ mailOn = !!(await api("GET", "/api/mail")).ready; }catch(e){ mailOn = false; } }
+const fileB64 = file => new Promise((ok, bad) => { const r = new FileReader(); r.onload = () => ok(String(r.result).split(",")[1] || ""); r.onerror = () => bad(new Error("Couldn't read the PDF.")); r.readAsDataURL(file); });
+// Short summary shown above the PDF in the email: form, when sent, job / purpose, staff.
+function emailText(form, purpose, staff){
+  const d = new Date(), p2 = x => String(x).padStart(2, "0");
+  const h = d.getHours(), when = `${p2(d.getDate())}-${p2(d.getMonth() + 1)}-${d.getFullYear()} ${h % 12 || 12}:${p2(d.getMinutes())} ${h < 12 ? "am" : "pm"}`;
+  const L = ["Form: " + form, "Sent: " + when];
+  if (purpose) L.push("Job / purpose: " + purpose);
+  if (staff && staff.length) L.push("Staff: " + staff.join(", "));
+  return L.join("\n");
+}
+async function emailPdf(file, to, subject, text){ return api("POST", "/api/mail", {to, subject, filename: file.name, pdf: await fileB64(file), text: text || ""}); }
+function unlock(){ checkMail(); document.body.classList.remove("locked"); $("#role-pill-home").hidden = !(auth && auth.role === "manager"); route(); loadIncidents(); }
+$("#gate-form").addEventListener("submit", async e => {
+  e.preventDefault();
+  const code = $("#gate-code").value.trim(), err = $("#gate-err"), btn = $("#gate-go");
+  if (!code){ err.textContent = "Enter the share code."; err.hidden = false; return; }
+  btn.disabled = true; err.hidden = true;
+  try{
+    const res = await fetch(API + "/api/login", {method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({code})});
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok){ err.textContent = data.error || "That code isn't right. Check it and try again."; err.hidden = false; return; }
+    auth = {code, role:data.role}; store.set(AUTH_KEY, auth); $("#gate-code").value = ""; unlock();
+  }catch(ex){ err.textContent = "No connection. You need signal the first time you open the app."; err.hidden = false; }
+  finally{ btn.disabled = false; }
+});
+
+/* ---------- install on home screen ---------- */
+// Android browsers offer a one-tap install; iPhones need the Safari Share menu, so we show the steps.
+const INSTALL_KEY = "sfs.forms.installHidden";
+const standalone = window.matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
+const ua = navigator.userAgent;
+const isIOS = /iPhone|iPad|iPod/.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+const isIOSSafari = isIOS && !/CriOS|FxiOS|EdgiOS|OPiOS|GSA/.test(ua);
+const isMobile = isIOS || /Android/.test(ua);
+let installEvent = null;
+function installHiddenRecently(){ const t = store.get(INSTALL_KEY, 0); return t && Date.now() - t < 7*86400000; }
+function showInstall(){ if (!standalone && !installHiddenRecently()) $("#install-banner").hidden = false; }
+window.addEventListener("beforeinstallprompt", e => { e.preventDefault(); installEvent = e; showInstall(); });
+window.addEventListener("appinstalled", () => { installEvent = null; $("#install-banner").hidden = true; });
+if (!standalone && isMobile) showInstall();
+const shareIcon = `<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="M8 7l4-4 4 4"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>`;
+$("#btn-install").addEventListener("click", async () => {
+  const help = $("#install-help");
+  if (installEvent){
+    installEvent.prompt();
+    const choice = await installEvent.userChoice.catch(() => null);
+    installEvent = null;
+    if (choice && choice.outcome === "accepted") $("#install-banner").hidden = true;
+    return;
+  }
+  if (isIOSSafari){
+    help.innerHTML = `<ol><li>Tap the <b>Share</b> button ${shareIcon} at the bottom of Safari (top right on iPad).</li><li>Scroll down and tap <b>Add to Home Screen</b>.</li><li>Tap <b>Add</b>. The SFS icon appears on your home screen.</li></ol>`;
+  } else if (isIOS){
+    help.innerHTML = `<ol><li>On iPhone the app can only be installed from <b>Safari</b>.</li><li>Copy this page's address, open <b>Safari</b> and paste it in.</li><li>Then tap <b>Share</b> ${shareIcon} and <b>Add to Home Screen</b>.</li></ol>`;
+  } else {
+    help.innerHTML = `<ol><li>Open your browser's menu (<b>⋮</b> in Chrome, <b>☰</b> in Samsung Internet).</li><li>Tap <b>Install app</b> or <b>Add to Home screen</b>.</li><li>Tap <b>Install</b> or <b>Add</b>.</li></ol>`;
+  }
+  help.hidden = false;
+});
+$("#btn-install-x").addEventListener("click", () => { store.set(INSTALL_KEY, Date.now()); $("#install-banner").hidden = true; });
+
+/* ---------- home screen and form pages ---------- */
+// A form's hash (e.g. "#toolbox") opens it; anything else shows the home screen.
+const ENGINE = window.NZCS_FORMS_ENGINE;
+const ONEOFF = {};   // "#toolbox" -> "toolbox"
+if (ENGINE){
+  Object.entries(ENGINE.forms).forEach(([key, f]) => {
+    ONEOFF[f.hash] = key;
+    if (f.noTile) return;
+    const a = document.createElement("a"); a.className = "tile"; a.href = f.hash; a.id = "tile-" + key;
+    a.innerHTML = `<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${f.icon}</svg></span>
+      <span class="tt"><b>${esc(f.title)}</b><span class="hint">${esc(f.blurb)}</span><span class="badges"><span class="badge draft" id="tile-draft-${key}" hidden>Form started</span></span></span>`;
+    a.dataset.form = key;
+    document.querySelector("#form-tiles").appendChild(a);
+  });
+}
+/* Folders on the home screen. Each form key belongs to one folder. */
+const FOLDERS = [
+  {id:"safety", title:"Health & Safety Forms", blurb:"Toolbox meetings, hazard and incident reports, visitor inductions, training records.", forms:["toolbox","hazard","incident","visitor","training"],
+   icon:'<path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/>'},
+  {id:"vehicles", title:"Vehicle & Equipment Checks", blurb:"Vehicle, trailer and quad / LUV pre-start checks.", forms:["vehicle","quad","trailer"],
+   icon:'<path d="M3 15V9l2-4h9l3 4h3a1 1 0 0 1 1 1v5"/><path d="M3 15h18"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/>'},
+];
+const folderOf = key => (FOLDERS.find(f => f.forms.includes(key)) || {}).id;
+// Any form not given a folder still shows up, in the last folder
+if (ENGINE) Object.keys(ENGINE.forms).forEach(k => { if (!ENGINE.forms[k].noTile && !folderOf(k)) FOLDERS[FOLDERS.length - 1].forms.push(k); });
+FOLDERS.forEach(f => {
+  const a = document.createElement("a"); a.className = "tile folder"; a.href = "#folder-" + f.id; a.id = "folder-" + f.id;
+  a.innerHTML = `<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${f.icon}</svg></span>
+    <span class="tt"><b>${esc(f.title)}</b><span class="hint">${esc(f.blurb)}</span><span class="count-line">${plural(f.forms.length, "form")}</span>
+    <span class="badges"><span class="badge" id="folder-jobs-${f.id}" hidden></span><span class="badge draft" id="folder-draft-${f.id}" hidden>Form started</span></span></span>`;
+  $("#folder-tiles").appendChild(a);
+});
+function showFolder(id){
+  const f = FOLDERS.find(x => x.id === id);
+  $("#folder-root").hidden = !!f; $("#folder-view").hidden = !f;
+  if (!f) return;
+  $("#folder-title").textContent = f.title;
+  // Show this folder's forms, in the folder's order
+  const host = $("#form-tiles");
+  host.querySelectorAll(".tile").forEach(t => t.hidden = !f.forms.includes(t.dataset.form));
+  f.forms.forEach(k => { const t = $("#tile-" + k); if (t) host.appendChild(t); });
+}
+function updateFolderBadges(){
+  FOLDERS.forEach(f => {
+    $("#folder-draft-" + f.id).hidden = !f.forms.some(k => ENGINE && ENGINE.forms[k] && ENGINE.isStarted(k));
+    const jb = $("#folder-jobs-" + f.id);
+    if (f.forms.includes("incident")){ const n = incidentsOpen.length; jb.hidden = !n; jb.className = "badge urgent"; jb.textContent = plural(n, "incident") + " to investigate"; }
+    else jb.hidden = true;
+  });
+}
+function route(){
+  const h = location.hash;
+  const investigating = h.startsWith("#investigate-");
+  const view = (ONEOFF[h] || investigating) ? "generic" : "home";
+  $("#generic-extra").innerHTML = "";
+  if (view === "home") showFolder(h.startsWith("#folder-") ? h.slice(8) : null);
+  document.body.classList.toggle("view-home", view === "home");
+  document.body.classList.toggle("view-generic", view === "generic");
+  if (view === "generic"){
+    if (investigating) openInvestigation(h.slice(13));
+    else { ENGINE.open(ONEOFF[h]); if (h === "#incident-report") renderIncidentInbox(); }
+  } else if (ENGINE) ENGINE.close();
+  if (view !== "home") closeDrawer();
+  if (view === "home"){
+    if (ENGINE) Object.keys(ENGINE.forms).forEach(k => { const b = $("#tile-draft-" + k); if (b) b.hidden = !ENGINE.isStarted(k); });
+    updateFolderBadges();
+  }
+  window.scrollTo(0, 0);
+}
+window.addEventListener("hashchange", route);
+const goTo = hash => { history.replaceState(null, "", location.pathname + hash); route(); };
+const backToFolder = e => {
+  e.preventDefault();
+  if (location.hash.startsWith("#investigate-")) return goTo("#incident-report");
+  const f = folderOf(ONEOFF[location.hash]); goTo(f ? "#folder-" + f : "");
+};
+$("#generic-home").addEventListener("click", backToFolder);
+$("#folder-back").addEventListener("click", e => { e.preventDefault(); goTo(""); });
+
+/* ---------- incident reports (stored until a manager investigates) ---------- */
+let incidentsOpen = [];
+const isManager = () => !!(auth && auth.role === "manager");
+async function loadIncidents(){
+  if (!isManager()) { incidentsOpen = []; return; }
+  try{ incidentsOpen = (await api("GET", "/api/incidents?status=open")).incidents || []; }catch(e){ /* keep last list */ }
+  const tb = $("#tile-incident"); if (tb){ let b = tb.querySelector(".badge.urgent"); if (!b){ b = document.createElement("span"); b.className = "badge urgent"; tb.querySelector(".badges").prepend(b); } b.hidden = !incidentsOpen.length; b.textContent = plural(incidentsOpen.length, "incident") + " to investigate"; }
+  updateFolderBadges();
+  if (location.hash === "#incident-report") renderIncidentInbox(true);
+}
+function renderIncidentInbox(noFetch){
+  const host = $("#generic-extra");
+  if (!isManager()){ host.innerHTML = ""; return; }
+  if (!noFetch) { loadIncidents(); }
+  host.innerHTML = incidentsOpen.length ? `<div class="inbox"><h2>Incidents to investigate (${incidentsOpen.length})</h2>` +
+    incidentsOpen.map(i => `<a class="inc" href="#investigate-${i.id}"><b>${esc(i.summary || "Incident report")}</b><span class="meta">Reported by ${esc(i.reported_by || "unknown")} · ${esc(dmy((i.created_at || "").slice(0,10)))}</span></a>`).join("") +
+    `<span class="hint">Tap one to read it and complete the investigation. To report a new incident, fill in the form below.</span></div>` : "";
+}
+async function openInvestigation(id){
+  if (!isManager()){ ENGINE.showMessage(`<section class="card"><p class="status bad">Only managers can open incident reports.</p></section>`); return; }
+  ENGINE.showMessage(`<section class="card"><p class="hint">Loading the report…</p></section>`);
+  try{
+    const {incident} = await api("GET", `/api/incidents/${id}`);
+    if (location.hash !== "#investigate-" + id) return;
+    ENGINE.openWith("incidentInv", Object.assign({}, incident.report, incident.investigation || {}), {id});
+  }catch(err){ ENGINE.showMessage(`<section class="card"><p class="status bad">${esc(err.message)}</p></section>`); }
+}
+window.NZCS_HOOKS = {
+  mail: () => ({on: mailOn && !mailFailed}),
+  mailFailed: () => { mailFailed = true; },
+  emailPdf, emailText,
+  submitIncident: body => api("POST", "/api/incidents", body),
+  saveInvestigation: async (id, investigation, complete) => { const r = await api("PUT", `/api/incidents/${id}`, {investigation, complete}); loadIncidents(); return r; },
+  deleteIncident: async id => { await api("DELETE", `/api/incidents/${id}`); loadIncidents(); },
+};
+
+/* ---------- incident alerts (Web Push) ---------- */
+const pushSupported = () => "serviceWorker" in navigator && "PushManager" in window && "Notification" in window && location.protocol === "https:";
+const isInstalled = () => window.matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
+const b64ToBytes = b => { const s = atob((b + "=".repeat((4 - b.length % 4) % 4)).replace(/-/g, "+").replace(/_/g, "/")); return Uint8Array.from(s, c => c.charCodeAt(0)); };
+async function currentSub(){ if (!pushSupported()) return null; const reg = await navigator.serviceWorker.getRegistration(); return reg ? reg.pushManager.getSubscription() : null; }
+async function renderAlerts(){
+  const box = $("#alerts-section"); if (!box) return;
+  box.hidden = !isManager(); if (!isManager()) return;
+  const st = $("#alerts-state"), btn = $("#btn-alerts");
+  if (!pushSupported()){ st.textContent = "This phone or browser can't show app alerts."; btn.hidden = true; return; }
+  if (/iPhone|iPad|iPod/.test(navigator.userAgent) && !isInstalled()){ st.textContent = "On iPhone, add the app to your home screen first, then open it from there to turn on alerts."; btn.hidden = true; return; }
+  const sub = await currentSub();
+  btn.hidden = false;
+  st.textContent = sub ? "On for this phone. You'll get a notification when an incident is reported." : "Off for this phone.";
+  btn.textContent = sub ? "Turn off incident alerts" : "Turn on incident alerts";
+  btn.dataset.on = sub ? "1" : "";
+}
+async function toggleAlerts(){
+  const msg = $("#alerts-msg"); msg.className = "status"; msg.textContent = "";
+  try{
+    const reg = await navigator.serviceWorker.ready;
+    let sub = await reg.pushManager.getSubscription();
+    if ($("#btn-alerts").dataset.on){
+      if (sub){ await api("POST", "/api/push/unsubscribe", {endpoint: sub.endpoint}); await sub.unsubscribe(); }
+      msg.textContent = "Incident alerts turned off.";
+    } else {
+      const perm = await Notification.requestPermission();
+      if (perm !== "granted"){ msg.className = "status bad"; msg.textContent = "Notifications are blocked. Allow them for this app in your phone's settings, then try again."; return; }
+      const {key} = await api("GET", "/api/push/key");
+      if (!sub) sub = await reg.pushManager.subscribe({userVisibleOnly:true, applicationServerKey:b64ToBytes(key)});
+      await api("POST", "/api/push/subscribe", {endpoint: sub.endpoint});
+      msg.textContent = "Incident alerts turned on for this phone.";
+    }
+  }catch(err){ msg.className = "status bad"; msg.textContent = "Couldn't change alerts: " + (err.message || err); }
+  renderAlerts();
+}
+
+/* ---------- settings drawer: share the app ---------- */
+const APP_URL = "https://wade-14.github.io/sfs-forms/";
+let workerCode = "";
+function shareMessage(){
+  return `Kia ora, here's the SFS Forms app for our health and safety forms:\n${APP_URL}\n\nShare code: ${workerCode || "(ask the office)"}\n\nOpen the link, enter the code, then tap "Install app" to put it on your home screen.`;
+}
+async function loadShareCode(){
+  $("#share-url").textContent = APP_URL;
+  if (workerCode){ $("#share-code").textContent = workerCode; return; }
+  // Only ever the worker code: from the server, or this phone's own code if it's a worker phone
+  try{ const r = await api("GET", "/api/share-code"); workerCode = (r.code || "").toUpperCase(); }
+  catch(e){ if (auth && auth.role === "worker") workerCode = auth.code.toUpperCase(); }
+  $("#share-code").textContent = workerCode || "Needs signal to load";
+}
+$("#btn-alerts").addEventListener("click", toggleAlerts);
+function openDrawer(){ renderAlerts(); document.body.classList.add("drawer-open"); $("#drawer").setAttribute("aria-hidden","false"); $("#btn-menu").setAttribute("aria-expanded","true"); $("#share-app-status").textContent = ""; loadShareCode(); $("#drawer-close").focus(); }
+function closeDrawer(){ if (!document.body.classList.contains("drawer-open")) return; document.body.classList.remove("drawer-open"); $("#drawer").setAttribute("aria-hidden","true"); $("#btn-menu").setAttribute("aria-expanded","false"); $("#btn-menu").focus(); }
+$("#btn-menu").addEventListener("click", openDrawer);
+$("#drawer-close").addEventListener("click", closeDrawer);
+$("#drawer-shade").addEventListener("click", closeDrawer);
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeDrawer(); });
+function shareStatus(msg, bad){ const s = $("#share-app-status"); s.className = "status" + (bad ? " bad" : ""); s.textContent = msg; }
+function copyShare(){
+  const txt = shareMessage();
+  const fallback = () => { let ta = $("#share-fallback"); if (!ta){ ta = document.createElement("textarea"); ta.id = "share-fallback"; ta.style.cssText = "width:100%;min-height:160px"; $("#share-app-status").after(ta); } ta.value = txt; ta.select(); shareStatus("Copying is blocked here. Select the text below and copy it.", true); };
+  try{ navigator.clipboard.writeText(txt).then(() => shareStatus("Copied. Paste it into a text or email."), fallback); }catch(e){ fallback(); }
+}
+$("#btn-copy-app").addEventListener("click", copyShare);
+$("#btn-share-app").addEventListener("click", async () => {
+  if (navigator.share){
+    try{ await navigator.share({title:"SFS Forms", text:shareMessage()}); shareStatus("Shared."); }
+    catch(err){ if (!(err && err.name === "AbortError")) copyShare(); }
+  } else copyShare();
+});
+
+/* ---------- start ---------- */
+route();
+if (auth) unlock();
+if ("serviceWorker" in navigator && location.protocol === "https:") navigator.serviceWorker.register("sw.js").catch(() => {});
+})();
+</script>
+</body>
+</html>

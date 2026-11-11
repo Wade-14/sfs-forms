@@ -1,0 +1,20 @@
+name = "sfs-forms-api"
+main = "src/index.js"
+compatibility_date = "2025-09-01"
+account_id = "dc50d269d55490062b7b588156ed2fa1"
+workers_dev = true
+
+[[d1_databases]]
+binding = "DB"
+database_name = "sfs-forms"
+database_id = "6a508137-b79f-4efb-8dca-ee09c483c979"
+
+[vars]
+# Public half of the incident-alert signing key (safe to publish). The private half is the VAPID_PRIVATE_JWK secret.
+VAPID_PUBLIC = "BBlhsNm_CiCtU3FH-p4g31ZB70G6LfYSmoJDiqbyYQ1UZkUv5ogBxO_P2ghxaJPyDVcWPX4GSnzC6JnknCaD-yQ"
+
+[triggers]
+crons = ["23 14 * * *"]   # daily tidy-up, ~3am NZ time
+
+# Secrets (wrangler secret put / Cloudflare dashboard), never stored here:
+# WORKER_CODE, MANAGER_CODE, VAPID_PRIVATE_JWK, MAIL_USER, MAIL_PASSWORD
