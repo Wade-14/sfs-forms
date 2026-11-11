@@ -53,7 +53,7 @@ cd worker && WRANGLER_SEND_METRICS=false CLOUDFLARE_API_TOKEN=proxy-injected CLO
 
 ## Recipients
 
-All forms (including the finished incident investigation) go to: southlandforestservices@gmail.com, jimie64@hotmail.com, team@nzconservation.nz (Wade), operations@nzconservation.nz (Gareth). The app calls them "the office".
+All forms (including the finished incident investigation) go to: southlandforestservices@gmail.com, jimie64@hotmail.com (Jimmy Sycamore, SFS managing director), team@nzconservation.nz (Wade), operations@nzconservation.nz (Gareth). The app calls them "Jimmy, Wade, Gareth and the SFS inbox".
 
 ## Forms (v1, adapted from the NZCS forms)
 

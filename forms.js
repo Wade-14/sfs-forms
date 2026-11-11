@@ -25,7 +25,7 @@ const FORMS = {
     pdfTitle: "SFS Toolbox Meeting",
     blurb: "Daily pre-start: hazards, health, weather and activities, signed by the crew.",
     sendTo: SEND_TO,
-    sendToLabel: "the office",
+    sendToLabel: "Jimmy, Wade, Gareth and the SFS inbox",
     icon: '<path d="M4 9h16v10a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"/><path d="M9 9V6a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"/><path d="M4 13h16"/>',
     titleFrom: v => `${v.job || "Job"} ${dmy(v.when)}`,
     sections: [
@@ -98,7 +98,7 @@ const FORMS = {
     pdfTitle: "SFS Quad Pre Start Check",
     blurb: "Pre-start check for quads and LUVs: tyres, brakes, lights, oil, hours.",
     sendTo: SEND_TO,
-    sendToLabel: "the office",
+    sendToLabel: "Jimmy, Wade, Gareth and the SFS inbox",
     icon: '<circle cx="6" cy="17" r="3"/><circle cx="18" cy="17" r="3"/><path d="M9 17h6M6 14l2-5h6l3 5M12 9V6h3"/>',
     titleFrom: v => `${v.vehicle || "Vehicle"} ${dmy(v.when)}`,
     sections: [
@@ -136,7 +136,7 @@ const FORMS = {
     pdfTitle: "SFS Hazard Report",
     blurb: "Report a hazard on site: what it is, where, photos, and what's been done about it.",
     sendTo: SEND_TO,
-    sendToLabel: "the office",
+    sendToLabel: "Jimmy, Wade, Gareth and the SFS inbox",
     icon: '<path d="M12 3l9.5 17h-19z"/><path d="M12 10v4.5"/><circle cx="12" cy="17.3" r=".6" fill="currentColor"/>',
     // File name uses the first part of the address, e.g. "Marshall Road 358"
     titleFrom: v => `${((v.location && v.location.address) || "").split(",")[0].trim() || "Hazard"} ${dmy(v.when)}`,
@@ -172,7 +172,7 @@ const FORMS = {
     pdfTitle: "SFS Vehicle Pre Start Check",
     blurb: "Pre-start check for utes and trucks: WOF, rego, service, engine, tyres, lights, safety gear.",
     sendTo: SEND_TO,
-    sendToLabel: "the office",
+    sendToLabel: "Jimmy, Wade, Gareth and the SFS inbox",
     icon: '<path d="M3 15V9l2-4h9l3 4h3a1 1 0 0 1 1 1v5"/><path d="M3 15h18"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/>',
     titleFrom: v => `${v.vehicle || "Vehicle"} ${dmy(v.when)}`,
     sections: [
@@ -240,7 +240,7 @@ const FORMS = {
     pdfTitle: "SFS Trailer Pre Start Check",
     blurb: "Pre-start check for trailers: rego, WOF, lights, wheels, couplings.",
     sendTo: SEND_TO,
-    sendToLabel: "the office",
+    sendToLabel: "Jimmy, Wade, Gareth and the SFS inbox",
     icon: '<path d="M2 8h15v8H2z"/><path d="M17 13h3l2 1"/><circle cx="7" cy="17.5" r="2"/><circle cx="12" cy="17.5" r="2"/>',
     titleFrom: v => `${v.trailer || "Trailer"} ${dmy(v.when)}`,
     sections: [
@@ -363,7 +363,7 @@ FORMS.incidentInv = {
   pdfTitle: "SFS Incident / Accident Investigation",
   mode: "investigate",
   sendTo: SEND_TO,
-  sendToLabel: "the office",
+  sendToLabel: "Jimmy, Wade, Gareth and the SFS inbox",
   titleFrom: incidentTitle,
   sections: INCIDENT_EMPLOYEE.map(sec => Object.assign({}, sec, {locked:true})).concat(INCIDENT_INVESTIGATION),
 };
@@ -374,7 +374,7 @@ FORMS.visitor = {
   pdfTitle: "SFS Visitor Induction",
   blurb: "Induct a visitor on site: hazards, emergency procedures, safety rules and sign-off.",
   sendTo: SEND_TO,
-  sendToLabel: "the office",
+  sendToLabel: "Jimmy, Wade, Gareth and the SFS inbox",
   icon: '<circle cx="12" cy="7.5" r="3.5"/><path d="M5 21v-2a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5v2"/><path d="M15.5 4.5l1.5 1.5 3-3"/>',
   titleFrom: v => `${v.visitorName || "Visitor"} ${dmy(v.when)}`,
   sections: [
@@ -408,7 +408,7 @@ FORMS.training = {
   pdfTitle: "SFS Training Record",
   blurb: "Record training given: topics, trainees, trainer, course length and sign-off.",
   sendTo: SEND_TO,
-  sendToLabel: "the office",
+  sendToLabel: "Jimmy, Wade, Gareth and the SFS inbox",
   icon: '<path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c3 2 9 2 12 0v-5"/><path d="M22 9v6"/>',
   titleFrom: v => `${(v.topics || "Training").split(/\n|[.,]/)[0].trim().slice(0, 40) || "Training"} ${dmy(v.when)}`,
   sections: [
