@@ -61,7 +61,7 @@ Folders: **Health & Safety Forms** (Toolbox Meeting, Hazard Report, Incident / A
 
 Changes from NZCS: NZCS names, office notices (bird flu, Matariki tractors) and the NZCS office address removed; company is "Southland Forest Services"; visitor statements name SFS; incident "who to contact" says "Management" instead of NZCS names. Vehicle, quad and trailer are **typed** until SFS sends its gear lists (then make them pick lists with "Other", like NZCS). Toolbox activities, hazard types and checklists are still the NZCS lists. Wade is to send SFS's own forms/lists.
 
-**No staff list yet** (`STAFF = []`): until it's filled in, name fields are typed boxes (several names separated by commas) and signatures take a typed name. Once `STAFF` has names, the pick lists come back automatically.
+**Staff** (`STAFF` in index.html, from SFS's BrightHR list, 12-11-2026): Adriu Junior, Aliki Kaikoso, Amenisitai Kunawakai, David Ross, Iliesa Veisei, Jimmy Sycamore, Jeremaia Ravisa, Jovesa Cakau, Logan Carse, Roger Hill, Sativa Sycamore, Shane Sycamore, Tenille McIntyre, Timothy Hill, Toby Haliday, Vailoa Lemamea. Jimmy is "Jamie" in BrightHR; he goes by Jimmy. Toby is spelled "Haliday" to match the NZCS app. **Managers** (hold the manager code): Toby Haliday and Jimmy Sycamore; the incident investigation's "who to contact" lists "Toby Haliday or Jimmy Sycamore (management)". If `STAFF` is ever emptied, name fields fall back to typed boxes.
 
 ## Conventions (same as NZCS)
 
@@ -75,5 +75,5 @@ Dates dd-mm-yyyy, NZ English, plain short prompts. PDF file name: form – job/p
 ## To do
 
 - SFS logo file → `vendor/logo.js` (logo is wide, about 3.7:1, so the `addImage` size in `buildPDF` needs changing) and app icons.
-- SFS staff list, managers, vehicles / quads / trailers, their own forms.
+- Vehicles / quads / trailers, their own forms.
 - Mail secrets on `sfs-forms-api`.

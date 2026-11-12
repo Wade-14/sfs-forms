@@ -364,8 +364,8 @@ body.drawer-open .drawer-shade{opacity:1;pointer-events:auto}
 (function(){
 "use strict";
 /* ---- Who appears in the staff lists, and the storage service ---- */
-// SFS staff: fill in when the names come through. Until then people type names under "Other".
-const STAFF = [];
+// SFS staff (from BrightHR, 12-11-2026), plus Toby Haliday. Managers: Toby Haliday and Jimmy (Jamie) Sycamore.
+const STAFF = ["Adriu Junior", "Aliki Kaikoso", "Amenisitai Kunawakai", "David Ross", "Iliesa Veisei", "Jimmy Sycamore", "Jeremaia Ravisa", "Jovesa Cakau", "Logan Carse", "Roger Hill", "Sativa Sycamore", "Shane Sycamore", "Tenille McIntyre", "Timothy Hill", "Toby Haliday", "Vailoa Lemamea"];
 window.NZCS_STAFF = STAFF;
 const API = /^(localhost|127\.0\.0\.1)$/.test(location.hostname) ? "http://localhost:8787" : "https://sfs-forms-api.royal-dawn-9e17.workers.dev";
 

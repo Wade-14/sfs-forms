@@ -328,7 +328,7 @@ const INCIDENT_EMPLOYEE = [
 const INCIDENT_INVESTIGATION = [
   { title: "Investigation (employer)", fields: [
     { id:"contacted", type:"multi", label:"Who needs to be contacted?",
-      options:["Family / emergency contact","WorkSafe","Police","Management","Environment Southland","Emergency services","Other","Not needed"] },
+      options:["Family / emergency contact","WorkSafe","Police","Toby Haliday or Jimmy Sycamore (management)","Environment Southland","Emergency services","Other","Not needed"] },
     { id:"contactDetails", type:"textarea", label:"Details, and when they were contacted" },
     { id:"witnesses", type:"textarea", label:"Name(s) and contact details of any witnesses" },
     { id:"classification", type:"choice", label:"Was it an accident, incident or near miss?", options:["Accident","Incident","Near miss"] },
