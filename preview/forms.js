@@ -113,9 +113,9 @@ const FORMS = {
   quad: {
     staffField: "inspector",
     hash: "#quad-check",
-    title: "Quad / LUV Check",
-    pdfTitle: "SFS Quad Pre Start Check",
-    blurb: "Pre-start check for quads and LUVs: tyres, brakes, lights, oil, hours.",
+    title: "LUV Check",
+    pdfTitle: "SFS LUV Pre Start Check",
+    blurb: "Pre-start check for the LUVs: tyres, brakes, lights, oil, hours.",
     sendTo: SEND_TO,
     sendToLabel: "Jimmy, Wade, Gareth and the SFS inbox",
     icon: '<circle cx="6" cy="17" r="3"/><circle cx="18" cy="17" r="3"/><path d="M9 17h6M6 14l2-5h6l3 5M12 9V6h3"/>',
@@ -125,9 +125,9 @@ const FORMS = {
         { id:"when", type:"datetime", label:"Date & time", required:true },
         { id:"inspector", type:"person", label:"Inspector (staff performing the check)", required:true },
         // SFS's LUVs (Wade, 12-11-2026); "Other" for anything else
-        { id:"vehicle", type:"choice", label:"Which quad / LUV is being inspected?", required:true,
+        { id:"vehicle", type:"choice", label:"Which LUV is being inspected?", required:true,
           options:["LUV Polaris 570 red","LUV Polaris 570 green","LUV Polaris XP 1000","Other"] },
-        { id:"vehicleOther", type:"text", label:"Which quad / LUV? (make, model or number)", showIf:v => v.vehicle === "Other" },
+        { id:"vehicleOther", type:"text", label:"Which LUV? (make, model or number)", showIf:v => v.vehicle === "Other" },
       ]},
       { title: "Pre-start checks", fields: [
         { id:"checks", type:"checklist", alertUnticked:true, label:"Tick each item once checked and OK",
@@ -259,18 +259,20 @@ const FORMS = {
     hash: "#trailer-check",
     title: "Trailer Check",
     pdfTitle: "SFS Trailer Pre Start Check",
-    blurb: "Pre-start check for trailers: rego, WOF, lights, wheels, couplings.",
+    blurb: "Pre-start check for trailers and horse floats: rego, WOF, lights, wheels, couplings.",
     sendTo: SEND_TO,
     sendToLabel: "Jimmy, Wade, Gareth and the SFS inbox",
     icon: '<path d="M2 8h15v8H2z"/><path d="M17 13h3l2 1"/><circle cx="7" cy="17.5" r="2"/><circle cx="12" cy="17.5" r="2"/>',
-    titleFrom: v => `${v.trailer || "Trailer"} ${dmy(v.when)}`,
+    titleFrom: v => `${(v.trailer === "Other" ? (v.trailerOther || "Other trailer") : v.trailer) || "Trailer"} ${dmy(v.when)}`,
     sections: [
       { title: "Check details", fields: [
         { id:"when", type:"datetime", label:"Date and time", required:true },
         { id:"location", type:"location", label:"Location" },
         { id:"person", type:"person", label:"Person filling out the form", required:true },
-        // SFS trailers: swap this for a pick list (with "Other") once the list comes through
-        { id:"trailer", type:"text", label:"Trailer being checked (make, type and rego)", required:true },
+        // Same trailers as NZCS (Wade, 12-11-2026); "Other" for anything else
+        { id:"trailer", type:"select", label:"Trailer being checked", required:true,
+          options:["Jobmate 7x4 143G7","Jobmate 7x4 cage trailer 97F53","Red Briford trailer P301G","Briford 846M3","Briford tip trailer 6BR70","T Choice T989U","Single horse float 23F21","Double horse float","Other"] },
+        { id:"trailerOther", type:"text", label:"Which trailer? (make, type and rego)", showIf:v => v.trailer === "Other" },
       ]},
       { title: "Registration and WOF", fields: [
         { id:"registered", type:"choice", options:YN, alertIf:"No", label:"Is it currently registered?" },
