@@ -17,7 +17,98 @@ const todayISO = () => { const d = new Date(); return `${d.getFullYear()}-${pad2
 const YN = ["Yes", "No"];
 // Where finished forms are emailed (Wade's list, 12-11-2026). Any new address must also go in MAIL_TO_ALLOWED in worker/src/mail.js.
 const SEND_TO = ["southlandforestservices@gmail.com", "jimie64@hotmail.com", "team@nzconservation.nz", "operations@nzconservation.nz"];
+const HAZARD_RATING = ["Low","Medium","High","Very high"];
 const FORMS = {
+  // SFS's own Daily Toolbox / JSA Meeting, built from their blank form (12-11-2026).
+  toolbox: {
+    staffField: "staff",
+    hash: "#toolbox",
+    title: "Toolbox Meeting",
+    pdfTitle: "SFS Daily Toolbox JSA Meeting",
+    blurb: "Daily toolbox / JSA: tasks, site hazards and controls, health, weather and checklist, signed by the crew.",
+    sendTo: SEND_TO,
+    sendToLabel: "Jimmy, Wade, Gareth and the SFS inbox",
+    icon: '<path d="M4 9h16v10a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"/><path d="M9 9V6a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"/><path d="M4 13h16"/>',
+    // File name uses the first part of the address, e.g. "Mossburn Road"
+    titleFrom: v => `${((v.location && v.location.address) || "").split(",")[0].trim() || "Toolbox"} ${dmy(v.when)}`,
+    sections: [
+      { title: "Meeting information", fields: [
+        { id:"when", type:"datetime", label:"Date & time", required:true },
+        { id:"runBy", type:"person", other:true, label:"Name of person running meeting", required:true },
+        { id:"runByOther", type:"text", label:"Name of person running meeting", showIf:v => v.runBy === "Other" },
+        { id:"staff", type:"people", label:"Staff involved in meeting", other:true, required:true },
+        { id:"staffOther", type:"textarea", label:"Other staff involved (names)", showIf:v => (v.staff||[]).includes("Other") },
+        { id:"location", type:"location", label:"Location" },
+        { id:"emergencyPoint", type:"text", label:"Emergency meeting point" },
+        { id:"otherPeople", type:"textarea", label:"Any other people attending the meeting (please list)" },
+      ]},
+      { title: "Today's tasks", fields: [
+        { id:"tasks", type:"multi", label:"Today's tasks", required:true,
+          options:["Pest control","Thinning to waste","E-thinning","Pruning","Spraying","Regen control","Planting","Plotting"] },
+        { id:"chainsaw", type:"choice", options:YN, label:"Are you using a chainsaw?" },
+        { type:"notice", text:"Go over your safety checks and follow the ACOP for chainsaw use.", showIf:v => v.chainsaw === "Yes" },
+      ]},
+      { title: "Site specific safety hazards", fields: [
+        { id:"hDriving", type:"textarea", label:"Driving (group discussion)" },
+        { id:"hDrivingRating", type:"choice", label:"Hazard rating", options:HAZARD_RATING },
+        { id:"hDrivingControl", type:"textarea", label:"Control (group discussion)" },
+        { id:"hDrivingRevised", type:"choice", label:"Revised hazard rating", options:HAZARD_RATING },
+        { id:"hFatigue", type:"textarea", label:"Fatigue (group discussion)" },
+        { id:"hFatigueRating", type:"choice", label:"Hazard rating", options:HAZARD_RATING },
+        { id:"hFatigueControl", type:"textarea", label:"Control (group discussion)" },
+        { id:"hFatigueRevised", type:"choice", label:"Revised hazard rating", options:HAZARD_RATING },
+        { id:"h3", type:"textarea", label:"Hazard 3 (group discussion)" },
+        { id:"h3Rating", type:"choice", label:"Hazard rating", options:HAZARD_RATING, showIf:v => !!(v.h3 || "").trim() },
+        { id:"h3Control", type:"textarea", label:"Control (group discussion)", showIf:v => !!(v.h3 || "").trim() },
+        { id:"h3Revised", type:"choice", label:"Revised hazard rating", options:HAZARD_RATING, showIf:v => !!(v.h3 || "").trim() },
+        { id:"h4", type:"textarea", label:"Hazard 4 (group discussion)" },
+        { id:"h4Rating", type:"choice", label:"Hazard rating", options:HAZARD_RATING, showIf:v => !!(v.h4 || "").trim() },
+        { id:"h4Control", type:"textarea", label:"Control (group discussion)", showIf:v => !!(v.h4 || "").trim() },
+        { id:"h4Revised", type:"choice", label:"Revised hazard rating", options:HAZARD_RATING, showIf:v => !!(v.h4 || "").trim() },
+        { id:"h5", type:"textarea", label:"Hazard 5 (group discussion)" },
+        { id:"h5Rating", type:"choice", label:"Hazard rating", options:HAZARD_RATING, showIf:v => !!(v.h5 || "").trim() },
+        { id:"h5Control", type:"textarea", label:"Control (group discussion)", showIf:v => !!(v.h5 || "").trim() },
+        { id:"h5Revised", type:"choice", label:"Revised hazard rating", options:HAZARD_RATING, showIf:v => !!(v.h5 || "").trim() },
+      ]},
+      { title: "Health and fitness", fields: [
+        { id:"fit", type:"choice", options:YN, label:"Is everyone fit for work?" },
+        { id:"fitDetails", type:"textarea", label:"Record details", showIf:v => v.fit === "No" },
+        { id:"meds", type:"choice", options:YN, label:"Anybody on medication that may affect their ability to perform today's tasks?" },
+        { id:"medsDetails", type:"textarea", label:"Record details", showIf:v => v.meds === "Yes" },
+      ]},
+      { title: "Today's information", fields: [
+        { id:"weather", type:"multi", label:"Weather for today", options:["Sunny","Windy","Rain","Stormy","Foggy","Snow","Overcast","Other"] },
+        { id:"weatherOther", type:"text", label:"Other weather", showIf:v => (v.weather||[]).includes("Other") },
+        { id:"weatherSafe", type:"choice", options:YN, label:"Is the weather safe to work in?" },
+        { id:"temp", type:"choice", label:"Temperature for the day", options:["Cold","Warm","Hot"] },
+      ]},
+      { title: "General items / activities checklist", fields: [
+        { id:"eventFree", type:"choice", options:YN, label:"Were the previous day's activities event free?" },
+        { id:"eventLessons", type:"textarea", label:"Discuss the event/s and lessons learnt", showIf:v => v.eventFree === "No" },
+        { id:"assessed", type:"choice", options:YN, label:"Assessment of work area complete?" },
+        { id:"toilets", type:"textarea", label:"Have the designated toilet areas been explained? (describe briefly where)" },
+        { id:"sanitiser", type:"choice", options:YN, label:"Is there hand sanitiser / washing facilities provided?" },
+        { id:"emergencyExplained", type:"choice", options:YN, label:"Have the emergency meeting points been explained and identified?" },
+        { id:"trained", type:"choice", options:YN, label:"All staff are trained for today's tasks?" },
+        { id:"trainedNo", type:"textarea", label:"Explain who, and if they are under training or if not, when they will begin training", showIf:v => v.trained === "No" },
+        { id:"ppe", type:"choice", options:YN, label:"All staff have suitable PPE in good condition for today's tasks?" },
+        { type:"notice", text:"If missing PPE can't be replaced on site and is key equipment, the staff member is to stand down for the day.", showIf:v => v.ppe === "No" },
+        { id:"ppeNo", type:"textarea", label:"Record the missing PPE item/s and comment", showIf:v => v.ppe === "No" },
+        { id:"plant", type:"choice", options:YN, label:"Plant, equipment and materials are up to date, well maintained and safe for use? Including chainsaws" },
+        { id:"plantNo", type:"textarea", label:"Please explain why and what is to be done about it", showIf:v => v.plant === "No" },
+        { id:"instructed", type:"choice", options:YN, label:"All staff instructed and understand in relation to today's work requirements?" },
+        { id:"instructedNo", type:"textarea", label:"Please state corrective action and who is involved", showIf:v => v.instructed === "No" },
+        { id:"riskRating", type:"choice", label:"Based on assessment of work area, staff experience and environmental conditions, what risk would you rate today's activities? (Note: any tree felling is automatically classed as High risk)", options:["Low","Medium","High","Extreme"] },
+        { type:"notice", text:"Stop and reassess today's activities.", showIf:v => v.riskRating === "High" || v.riskRating === "Extreme" },
+        { id:"reassess", type:"textarea", label:"Reassessment notes", showIf:v => v.riskRating === "High" || v.riskRating === "Extreme" },
+        { id:"safe", type:"choice", options:YN, label:"Do you feel safe to work today?" },
+        { id:"safeWhy", type:"textarea", label:"If you do not feel safe to work, please explain why", showIf:v => v.safe === "No" },
+      ]},
+      { title: "Sign on", fields: [
+        { id:"signatures", type:"signatures", label:"Signatures of staff and visitors", required:true },
+      ]},
+    ],
+  },
   quad: {
     staffField: "inspector",
     hash: "#quad-check",
@@ -441,7 +532,7 @@ function fieldHTML(form, f, v){
     case "person": {
       const names = peopleList(form);
       if (!names.length) return `<div class="field"><label for="${id}">${esc(f.label)}${req}</label><input type="text" id="${id}" data-g="${f.id}" autocomplete="off" value="${esc(v[f.id])}" placeholder="Full name">${err}</div>`;
-      return `<div class="field"><label for="${id}">${esc(f.label)}${req}</label><select id="${id}" data-g="${f.id}"><option value="">Pick a name</option>${names.map(nm => `<option ${v[f.id] === nm ? "selected" : ""}>${esc(nm)}</option>`).join("")}</select>${err}</div>`;
+      return `<div class="field"><label for="${id}">${esc(f.label)}${req}</label><select id="${id}" data-g="${f.id}"><option value="">Pick a name</option>${names.concat(f.other ? ["Other"] : []).map(nm => `<option ${v[f.id] === nm ? "selected" : ""}>${esc(nm)}</option>`).join("")}</select>${err}</div>`;
     }
     case "select":
       return `<div class="field"><label for="${id}">${esc(f.label)}${req}</label><select id="${id}" data-g="${f.id}"><option value="">Pick one</option>${f.options.map(o => `<option ${v[f.id] === o ? "selected" : ""}>${esc(o)}</option>`).join("")}</select>${err}</div>`;
@@ -642,6 +733,8 @@ function updateDerived(){
   }));
 }
 // <select> fields fire "change", not always "input"
+// Typed boxes can reveal follow-up questions (e.g. Hazard 3's ratings); check once the person leaves the box.
+document.addEventListener("change", e => { const t = e.target; if (t.matches && t.matches("#generic-body textarea[data-g], #generic-body input[type=text][data-g]") && values()) rerenderIfShapeChanged(); });
 document.addEventListener("change", e => { const t = e.target; if (t.matches && t.matches("#generic-body select[data-g]")){ const v = values(); if (v){ v[t.dataset.g] = t.value; const er = $(`#g-${t.dataset.g}-err`); if (er) er.hidden = true; rerenderIfShapeChanged(); } } });
 
 /* ---------------- Signature pads ---------------- */
