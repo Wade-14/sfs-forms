@@ -65,6 +65,12 @@ Changes from NZCS: NZCS names and the NZCS office address removed; company is "S
 
 **Staff** (`STAFF` in index.html, from SFS's BrightHR list, 12-11-2026): Adriu Junior, Aliki Kaikoso, Amenisitai Kunawakai, David Ross, Iliesa Veisei, Jimmy Sycamore, Jeremaia Ravisa, Jovesa Cakau, Logan Carse, Roger Hill, Sativa Sycamore, Shane Sycamore, Tenille McIntyre, Timothy Hill, Toby Haliday, Vailoa Lemamea. Jimmy is "Jamie" in BrightHR; Wade confirmed the app says Jimmy. Toby is spelled "Haliday" to match the NZCS app. **Managers** (hold the manager code): Toby Haliday and Jimmy Sycamore; the incident investigation's "who to contact" lists "Toby Haliday or Jimmy Sycamore (management)". If `STAFF` is ever emptied, name fields fall back to typed boxes.
 
+## Outbox (sending out of reception)
+
+Ported from the NZCS app 12-11-2026 (Wade asked). When **Send PDF** fails because there's no signal (`err.offline`), the PDF, recipients, subject and email summary are saved in IndexedDB on the phone and sent automatically when the app is open with signal: on unlock, on the `online` event, when the app comes back to the front, and every minute. The employee's **incident submission** also queues (kind `incident`, POSTed to `/api/incidents` on signal, managers alerted as usual; goes even if email isn't set up). The finished incident investigation's PDF queues like any other form. The home screen shows an amber "N forms waiting to send" box (Share instead / Delete / Try sending now) and a green "Sent from the Outbox" note afterwards. `sfs.mailReady` in localStorage remembers that email works, so the app can queue even if it opens with no signal. iPhones can't send in the background: the app has to be opened in reception.
+
+**The IndexedDB database is `sfs-outbox`, never `nzcs-outbox`.** Both apps are on wade-14.github.io and share browser storage, so a shared name would make one app send the other's forms. Keep any future local-storage names prefixed `sfs`.
+
 ## Conventions (same as NZCS)
 
 Dates dd-mm-yyyy, NZ English, plain short prompts. PDF file name: form – job/place – staff initials – date. Ask Wade before adding fields or features he didn't ask for.
