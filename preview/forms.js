@@ -81,6 +81,7 @@ const FORMS = {
         { id:"weatherOther", type:"text", label:"Other weather", showIf:v => (v.weather||[]).includes("Other") },
         { id:"weatherSafe", type:"choice", options:YN, label:"Is the weather safe to work in?" },
         { id:"temp", type:"choice", label:"Temperature for the day", options:["Cold","Warm","Hot"] },
+        { id:"tempActual", type:"text", label:"Actual temperature (°C)", placeholder:"°C" },
       ]},
       { title: "General items / activities checklist", fields: [
         { id:"eventFree", type:"choice", options:YN, label:"Were the previous day's activities event free?" },
