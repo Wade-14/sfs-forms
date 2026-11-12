@@ -57,11 +57,13 @@ All forms (including the finished incident investigation) go to: southlandforest
 
 ## Forms (v1, adapted from the NZCS forms)
 
-Folders: **Health & Safety Forms** (Toolbox Meeting, Hazard Report, Incident / Accident Report, Visitor Induction, Training Record) and **Vehicle & Equipment Checks** (Vehicle Check, Quad / LUV Check, Trailer Check).
+Folders: **Health & Safety Forms** (Hazard Report, Incident / Accident Report, Visitor Induction, Training Record) and **Vehicle & Equipment Checks** (Vehicle Check, Quad / LUV Check, Trailer Check).
 
-Changes from NZCS: NZCS names, office notices (bird flu, Matariki tractors) and the NZCS office address removed; company is "Southland Forest Services"; visitor statements name SFS; incident "who to contact" says "Management" instead of NZCS names. Vehicle, quad and trailer are **typed** until SFS sends its gear lists (then make them pick lists with "Other", like NZCS). Toolbox activities, hazard types and checklists are still the NZCS lists. Wade is to send SFS's own forms/lists.
+**Toolbox Meeting:** the NZCS copy was removed on 12-11-2026 (SFS's toolbox is completely different). Wade is sending a blank of SFS's own toolbox form to build from; put it in the Health & Safety folder.
 
-**Staff** (`STAFF` in index.html, from SFS's BrightHR list, 12-11-2026): Adriu Junior, Aliki Kaikoso, Amenisitai Kunawakai, David Ross, Iliesa Veisei, Jimmy Sycamore, Jeremaia Ravisa, Jovesa Cakau, Logan Carse, Roger Hill, Sativa Sycamore, Shane Sycamore, Tenille McIntyre, Timothy Hill, Toby Haliday, Vailoa Lemamea. Jimmy is "Jamie" in BrightHR; he goes by Jimmy. Toby is spelled "Haliday" to match the NZCS app. **Managers** (hold the manager code): Toby Haliday and Jimmy Sycamore; the incident investigation's "who to contact" lists "Toby Haliday or Jimmy Sycamore (management)". If `STAFF` is ever emptied, name fields fall back to typed boxes.
+Changes from NZCS: NZCS names and the NZCS office address removed; company is "Southland Forest Services"; visitor statements name SFS; incident "who to contact" says "Management" instead of NZCS names. Vehicle, quad and trailer are **typed** until SFS sends its gear lists (then make them pick lists with "Other", like NZCS). Hazard types and checklists are still the NZCS lists. Wade is to send SFS's own forms/lists.
+
+**Staff** (`STAFF` in index.html, from SFS's BrightHR list, 12-11-2026): Adriu Junior, Aliki Kaikoso, Amenisitai Kunawakai, David Ross, Iliesa Veisei, Jimmy Sycamore, Jeremaia Ravisa, Jovesa Cakau, Logan Carse, Roger Hill, Sativa Sycamore, Shane Sycamore, Tenille McIntyre, Timothy Hill, Toby Haliday, Vailoa Lemamea. Jimmy is "Jamie" in BrightHR; Wade confirmed the app says Jimmy. Toby is spelled "Haliday" to match the NZCS app. **Managers** (hold the manager code): Toby Haliday and Jimmy Sycamore; the incident investigation's "who to contact" lists "Toby Haliday or Jimmy Sycamore (management)". If `STAFF` is ever emptied, name fields fall back to typed boxes.
 
 ## Conventions (same as NZCS)
 

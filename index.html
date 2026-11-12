@@ -463,9 +463,9 @@ $("#btn-install").addEventListener("click", async () => {
 $("#btn-install-x").addEventListener("click", () => { store.set(INSTALL_KEY, Date.now()); $("#install-banner").hidden = true; });
 
 /* ---------- home screen and form pages ---------- */
-// A form's hash (e.g. "#toolbox") opens it; anything else shows the home screen.
+// A form's hash (e.g. "#hazard-report") opens it; anything else shows the home screen.
 const ENGINE = window.NZCS_FORMS_ENGINE;
-const ONEOFF = {};   // "#toolbox" -> "toolbox"
+const ONEOFF = {};   // "#hazard-report" -> "hazard"
 if (ENGINE){
   Object.entries(ENGINE.forms).forEach(([key, f]) => {
     ONEOFF[f.hash] = key;
@@ -479,7 +479,7 @@ if (ENGINE){
 }
 /* Folders on the home screen. Each form key belongs to one folder. */
 const FOLDERS = [
-  {id:"safety", title:"Health & Safety Forms", blurb:"Toolbox meetings, hazard and incident reports, visitor inductions, training records.", forms:["toolbox","hazard","incident","visitor","training"],
+  {id:"safety", title:"Health & Safety Forms", blurb:"Hazard and incident reports, visitor inductions, training records.", forms:["hazard","incident","visitor","training"],
    icon:'<path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/>'},
   {id:"vehicles", title:"Vehicle & Equipment Checks", blurb:"Vehicle, trailer and quad / LUV pre-start checks.", forms:["vehicle","quad","trailer"],
    icon:'<path d="M3 15V9l2-4h9l3 4h3a1 1 0 0 1 1 1v5"/><path d="M3 15h18"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/>'},
