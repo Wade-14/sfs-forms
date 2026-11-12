@@ -964,7 +964,8 @@ function buildPDF(){
   doc.setFont("times","normal"); doc.setFontSize(22); doc.setTextColor(...ink);
   // Company logo top-left on the first page, title underneath it
   let top = 26;
-  if (window.NZCS_LOGO){ try{ doc.addImage(window.NZCS_LOGO, "JPEG", M, 8, 20, 20.7); top = 40; }catch(e){} }
+  // SFS logo is wide (tree + name): 62 mm across, height from its shape
+  if (window.NZCS_LOGO){ try{ const lw = 62, lh = lw / (window.NZCS_LOGO_RATIO || 3.67); doc.addImage(window.NZCS_LOGO, "JPEG", M, 8, lw, lh); top = 8 + lh + 13; }catch(e){} }
   const tl = doc.splitTextToSize(title, W - 2*M); doc.text(tl, M, top);
   let y = top + (tl.length-1)*9 + 7;
   doc.setFont("helvetica","normal"); doc.setFontSize(10.5); doc.text("Southland Forest Services", M, y); y += 8;

@@ -27,8 +27,8 @@ Health and safety field forms app for **Southland Forest Services** (sister comp
 - `index.html`: app shell. Share-code screen, home screen (folders → form tiles), settings drawer (share app, incident alerts), incident inbox/investigation. `STAFF` and `API` are near the top of the main script; `FOLDERS` sets the home-screen folders.
 - `forms.js`: forms engine plus definitions (`FORMS`). New forms are added here. `SEND_TO` near the top is where every form is emailed.
 - `sw.js`: service worker (network-first, offline fallback, incident alert notifications). **Bump `CACHE` on every release** in both `sw.js` and `preview/sw.js`.
-- `vendor/`: jsPDF 2.5.1 and AutoTable 3.8.2. `vendor/logo.js` holds the PDF logo (`window.NZCS_LOGO`, a JPEG data URL; the engine keeps the NZCS variable names). **Not set yet**, so PDFs have no logo.
-- `icon-*.png`: placeholder app icon (white pine tree + "SFS" on forest green). Replace with icons made from the SFS logo when the file is available.
+- `vendor/`: jsPDF 2.5.1 and AutoTable 3.8.2. `vendor/logo.js` holds the PDF logo: the full SFS tree-of-life logo with the name (`window.NZCS_LOGO`, 1200 × 327 JPEG data URL, and `window.NZCS_LOGO_RATIO`; the engine keeps the NZCS variable names). `buildPDF` prints it 62 mm wide at the top left of page 1. Made 12-11-2026 from Wade's vector file `SFS_tree_of_life_logo.pdf` (rendered with `pdftocairo`).
+- `icon-*.png`: app icons made from the tree-of-life emblem (left part of the logo) on white; `-maskable` versions keep it inside the safe zone.
 - `preview/`: full copy of the app for testing.
 - `worker/`: Cloudflare Worker (`src/index.js`, `src/mail.js`), D1 schema (`schema.sql`), `wrangler.toml`.
 
@@ -76,5 +76,4 @@ Dates dd-mm-yyyy, NZ English, plain short prompts. PDF file name: form – job/p
 
 ## To do
 
-- SFS logo file → `vendor/logo.js` (logo is wide, about 3.7:1, so the `addImage` size in `buildPDF` needs changing) and app icons.
 - Regos for the Nissan Caravan and Toyota Prado.
