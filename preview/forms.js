@@ -119,13 +119,15 @@ const FORMS = {
     sendTo: SEND_TO,
     sendToLabel: "Jimmy, Wade, Gareth and the SFS inbox",
     icon: '<circle cx="6" cy="17" r="3"/><circle cx="18" cy="17" r="3"/><path d="M9 17h6M6 14l2-5h6l3 5M12 9V6h3"/>',
-    titleFrom: v => `${v.vehicle || "Vehicle"} ${dmy(v.when)}`,
+    titleFrom: v => `${(v.vehicle === "Other" ? (v.vehicleOther || "Other vehicle") : v.vehicle) || "Vehicle"} ${dmy(v.when)}`,
     sections: [
       { title: "Check details", fields: [
         { id:"when", type:"datetime", label:"Date & time", required:true },
         { id:"inspector", type:"person", label:"Inspector (staff performing the check)", required:true },
-        // SFS quads / LUVs: swap this for a pick list once the list comes through
-        { id:"vehicle", type:"text", label:"Which quad / LUV is being inspected?", placeholder:"Make, model or number", required:true },
+        // SFS's LUVs (Wade, 12-11-2026); "Other" for anything else
+        { id:"vehicle", type:"choice", label:"Which quad / LUV is being inspected?", required:true,
+          options:["LUV Polaris 570 red","LUV Polaris 570 green","LUV Polaris XP 1000","Other"] },
+        { id:"vehicleOther", type:"text", label:"Which quad / LUV? (make, model or number)", showIf:v => v.vehicle === "Other" },
       ]},
       { title: "Pre-start checks", fields: [
         { id:"checks", type:"checklist", alertUnticked:true, label:"Tick each item once checked and OK",
