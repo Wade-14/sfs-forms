@@ -195,14 +195,16 @@ const FORMS = {
     sendTo: SEND_TO,
     sendToLabel: "Jimmy, Wade, Gareth and the SFS inbox",
     icon: '<path d="M3 15V9l2-4h9l3 4h3a1 1 0 0 1 1 1v5"/><path d="M3 15h18"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/>',
-    titleFrom: v => `${v.vehicle || "Vehicle"} ${dmy(v.when)}`,
+    titleFrom: v => `${(v.vehicle === "Other" ? (v.vehicleOther || "Other vehicle") : v.vehicle) || "Vehicle"} ${dmy(v.when)}`,
     sections: [
       { title: "Check details", fields: [
         { id:"when", type:"datetime", label:"Date and time", required:true },
         { id:"location", type:"location", label:"Location" },
         { id:"person", type:"person", label:"Person performing pre-start check", required:true },
-        // SFS vehicles: swap this for a pick list (with "Other") once the list comes through
-        { id:"vehicle", type:"text", label:"Vehicle (make, model and rego)", required:true },
+        // SFS vehicles (Wade, 12-11-2026). Nissan Caravan and Toyota Prado regos to come.
+        { id:"vehicle", type:"select", label:"Vehicle", required:true,
+          options:["Ford Ranger LJT666","Mazda BT50 DYR272","Suzuki Vitara HCE794","Nissan Caravan","Mitsubishi Triton DQU528","Toyota Hilux REA547","Toyota Prado","Other"] },
+        { id:"vehicleOther", type:"text", label:"Which vehicle? (make, model and rego)", showIf:v => v.vehicle === "Other" },
       ]},
       { title: "Vehicle details", fields: [
         { id:"wofDue", type:"choice", options:YN, alertIf:"Yes", label:"WOF due?" },
